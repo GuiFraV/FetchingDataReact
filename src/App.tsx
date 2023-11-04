@@ -9,16 +9,24 @@ interface Post {
 
 function App() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState()
   
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true);
       const response = await fetch(`${BASE_URL}/posts`);
       const posts = await response.json() as Post[];
       setPosts(posts);
+      setIsLoading(false);
     };
 
     fetchPosts();
   }, []);
+
+  if(isLoading){
+    return <div>Loading...</div>
+  }
 
   return (
 
