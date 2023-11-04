@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const BASE_URL = 'https://jsonplaceholder.typicode.com/';
 
@@ -11,18 +11,31 @@ function App() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(0);
+
+  const abordControllerRef = useRef<AbortController | null>(null)
   
   useEffect(() => {
     const fetchPosts = async () => {
 
+      abordControllerRef.current?.abort()
+      abordControllerRef.current = new AbortController();
+
       setIsLoading(true);
 
       try{
-        const response = await fetch(`${BASE_URL}/posts?page=${page}`);
+        const response = await fetch(`${BASE_URL}/posts?page=${page}, {
+          signal: abortControllerRef.current?.signal,
+        }`);
         const posts = await response.json() as Post[];
         setPosts(posts);
       }catch (e: any){
+        
+        if(e.name === "AbortError"){
+          console.log('Aborted');
+          return;
+        }
+        
         setError(e);
       } finally{
         setIsLoading(false);
