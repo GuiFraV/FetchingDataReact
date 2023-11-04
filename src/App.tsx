@@ -14,10 +14,18 @@ function App() {
   
   useEffect(() => {
     const fetchPosts = async () => {
+
       setIsLoading(true);
-      const response = await fetch(`${BASE_URL}/posts`);
-      const posts = await response.json() as Post[];
-      setPosts(posts);
+
+      try{
+        const response = await fetch(`${BASE_URL}/posts`);
+        const posts = await response.json() as Post[];
+        setPosts(posts);
+      }catch (e: any){
+        setError(e);
+      }
+
+
       setIsLoading(false);
     };
 
@@ -26,6 +34,10 @@ function App() {
 
   if(isLoading){
     return <div>Loading...</div>
+  }
+
+  if(error){
+    return <div>Something went wrong ! Please try again</div>
   }
 
   return (
