@@ -1,34 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+
+const BASE_URL = 'https://jsonplaceholder.typicode.com/';
+
+interface Post {
+  id:number;
+  title: string;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [posts, setPosts] = useState<Post[]>([]);
+  
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await fetch(`${BASE_URL}/posts`);
+      const posts = await response.json() as Post[];
+      setPosts(posts);
+    };
+
+    fetchPosts();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+    <div className='tutorial'>
+      <h1 className='mb-4 text-2xl'> Data Fetching in React</h1>
+      <ul>
+        {posts.map((post) => {
+          return <li key={post.id}>{post.title}</li>
+        })}
+      </ul>
+    </div>
+   
   )
 }
 
