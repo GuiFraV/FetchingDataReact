@@ -47,7 +47,7 @@ Pour démarrer le projet, suivez les étapes suivantes :
 2. Naviguez vers le dossier du projet via la ligne de commande.
 3. Installez les dépendances avec la commande `npm install`.
 4. Démarrez l'application avec la commande `npm start`.
-5. Ouvrez votre navigateur et accédez à `http://localhost:3000` pour voir l'application en action. 
+5. Ouvrez votre navigateur et accédez à `http://localhost:5173` pour voir l'application en action. 
 
 ## Structure du Code
 
